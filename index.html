@@ -5,59 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FROST | VAULT</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
+    <!-- Global background remains visible -->
+    <div class="bg-image"></div>
+
     <main id="app">
-        <!-- LANDING LAYER -->
+        <!-- LANDING -->
         <section id="view-landing" class="view active">
-            <div class="bg-image"></div>
             <div id="orb-trigger" class="orb-hitbox">
-    <div class="orb-glow"></div>
-    <!-- New Content Wrapper for Dead-Center Alignment -->
-    <div class="orb-content">
-        <span id="voice-label">FROST</span>
-        <div id="cmd-display">AWAIT_COMMAND</div>
-    </div>
-</div>
+                <div class="orb-glow"></div>
+                <div class="orb-content">
+                    <span id="voice-label">FROST</span>
+                    <div id="cmd-display">AWAIT_COMMAND</div>
+                </div>
+            </div>
         </section>
 
-        <!-- PRODUCT LAYER -->
+        <!-- PRODUCTS -->
         <section id="view-products" class="view">
             <div class="mist-overlay"></div>
-            
             <header class="product-header">
-                <div class="header-line"></div>
                 <h1 class="glitch-text" id="cat-title">COLLECTION</h1>
-                <p class="system-status">SYSTEM: ACTIVE // TEMP: -40°C</p>
+                <p style="font-size:8px; opacity:0.5; letter-spacing:2px;">SYSTEM ACTIVE // TEMP -40°C</p>
             </header>
-
-            <div id="product-grid" class="grid">
-                <!-- Products injected here -->
-            </div>
-
+            <div id="product-grid" class="grid"></div>
             <footer class="cmd-bar">
                 <button onclick="changeView('landing')" class="back-btn">REBOOT_SYSTEM</button>
             </footer>
-        </section>
-
-        <!-- CHECKOUT LAYER -->
-        <section id="view-checkout" class="view">
-            <div class="checkout-container">
-                <h2 class="glitch-text" style="font-size: 14px;">TRANSACTION_INIT</h2>
-                <div id="checkout-card" class="checkout-card-dynamic"></div>
-                
-                <div id="tracking-ui" style="display:none; width: 100%; margin-bottom: 20px;">
-                    <div class="track-line"><div id="trackFill" class="track-fill"></div></div>
-                    <p id="trackStatus" class="system-status">ENCRYPTING...</p>
-                </div>
-
-                <div class="checkout-actions">
-                    <button id="auth-btn" class="select-btn" onclick="startTracking()">AUTHORIZE_PAYMENT</button>
-                    <button onclick="changeView('products')" class="back-btn" style="margin-top:10px; width:100%;">CANCEL_TX</button>
-                </div>
-            </div>
         </section>
     </main>
 
