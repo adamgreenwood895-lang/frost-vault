@@ -21,7 +21,7 @@ body {
     position: fixed;
     inset: 0;
     /* Updated to the working filename from your previous prompt */
-    background: url('lv_0_20260430235239.jpg') no-repeat center center;
+    background: url('assets/iceman_portrait.jpg') no-repeat center center;
     background-size: cover;
     filter: brightness(0.5);
     z-index: -1; 
