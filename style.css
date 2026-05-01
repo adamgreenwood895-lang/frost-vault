@@ -18,11 +18,9 @@ body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow
     flex-direction: column;
     align-items: center;
     background: #000;
+    overflow: hidden; /* Prevents stray scrollbars */
 }
 
-.view.active { opacity: 1; pointer-events: auto; }
-
-/* LANDING */
 .bg-image {
     position: absolute;
     inset: 0;
@@ -35,11 +33,11 @@ body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow
 .orb-hitbox {
     position: absolute;
     /* This targets the dead center of the energy ball in the palm */
-    top: 60.5%; 
+    top: 65%; 
     left: 50%;
     transform: translate(-50%, -50%); 
     
-    width: 260px;
+    width: 280px;
     height: 260px;
     display: flex;
     justify-content: center;
@@ -50,13 +48,14 @@ body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow
 }
 
 .orb-content {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     pointer-events: none;
-    z-index: 11;
+    z-index: 12;
 }
 
 #voice-label {
