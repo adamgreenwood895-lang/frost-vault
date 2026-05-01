@@ -25,14 +25,22 @@
             </div>
         </section>
 
-        <!-- PRODUCT VIEW -->
-        <section id="view-products" class="view">
-            <header>
-                <h1 class="glitch-text" id="cat-title">COLLECTION</h1>
-                <button onclick="changeView('landing')" class="back-btn">RESET</button>
-            </header>
-            <div id="product-grid" class="grid"></div>
-        </section>
+        <!-- Updated PRODUCT VIEW Section in index.html -->
+<section id="view-products" class="view">
+    <div class="mist-overlay"></div> <!-- New: Animated fog/snow layer -->
+    
+    <header class="product-header">
+        <div class="header-line"></div>
+        <h1 class="glitch-text" id="cat-title">COLLECTION</h1>
+        <p class="system-status">SYSTEM: ACTIVE // TEMP: -40°C</p>
+    </header>
+
+    <div id="product-grid" class="grid"></div>
+
+    <button onclick="changeView('landing')" class="back-btn">
+        <span class="btn-glitch">REBOOT SYSTEM</span>
+    </button>
+</section>
 
         <!-- CHECKOUT VIEW -->
         <section id="view-checkout" class="view">
