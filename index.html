@@ -1,1 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FROST | VAULT</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for that ultra-modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;900&display=swap" rel="stylesheet">
+</head>
+<body>
 
+    <!-- Main App Container -->
+    <main id="app">
+        
+        <!-- LANDING VIEW -->
+        <section id="view-landing" class="view active">
+            <div class="bg-image"></div>
+            <div id="orb-trigger" class="orb-hitbox">
+                <div class="orb-glow"></div>
+                <div class="orb-ui">
+                    <span id="voice-label">FROST</span>
+                    <div id="cmd-display"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRODUCT VIEW -->
+        <section id="view-products" class="view">
+            <header>
+                <h1 class="glitch-text" id="cat-title">COLLECTION</h1>
+                <button onclick="changeView('landing')" class="back-btn">RESET</button>
+            </header>
+            <div id="product-grid" class="grid"></div>
+        </section>
+
+        <!-- CHECKOUT VIEW -->
+        <section id="view-checkout" class="view">
+            <div class="checkout-card" id="checkout-content"></div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
