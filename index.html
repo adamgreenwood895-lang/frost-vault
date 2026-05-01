@@ -25,24 +25,36 @@
         <!-- PRODUCT LAYER -->
         <section id="view-products" class="view">
             <div class="mist-overlay"></div>
+            
             <header class="product-header">
                 <div class="header-line"></div>
                 <h1 class="glitch-text" id="cat-title">COLLECTION</h1>
                 <p class="system-status">SYSTEM: ACTIVE // TEMP: -40°C</p>
             </header>
-            <div id="product-grid" class="grid"></div>
-            <button onclick="changeView('landing')" class="back-btn">REBOOT_SYSTEM</button>
+
+            <div id="product-grid" class="grid">
+                <!-- Products injected here -->
+            </div>
+
+            <footer class="cmd-bar">
+                <button onclick="changeView('landing')" class="back-btn">REBOOT_SYSTEM</button>
+            </footer>
         </section>
 
         <!-- CHECKOUT LAYER -->
         <section id="view-checkout" class="view">
             <div class="checkout-container">
-                <h2 class="glitch-text">TRANSACTION_INIT</h2>
-                <div id="checkout-card" class="product-card" style="max-width: 300px; margin: 20px auto;"></div>
-                <button class="select-btn" onclick="startTracking()" style="max-width: 200px;">AUTHORIZE_PAYMENT</button>
-                <div id="tracking-ui" style="display:none; width: 100%; margin-top: 20px;">
+                <h2 class="glitch-text" style="font-size: 14px;">TRANSACTION_INIT</h2>
+                <div id="checkout-card" class="checkout-card-dynamic"></div>
+                
+                <div id="tracking-ui" style="display:none; width: 100%; margin-bottom: 20px;">
                     <div class="track-line"><div id="trackFill" class="track-fill"></div></div>
                     <p id="trackStatus" class="system-status">ENCRYPTING...</p>
+                </div>
+
+                <div class="checkout-actions">
+                    <button id="auth-btn" class="select-btn" onclick="startTracking()">AUTHORIZE_PAYMENT</button>
+                    <button onclick="changeView('products')" class="back-btn" style="margin-top:10px; width:100%;">CANCEL_TX</button>
                 </div>
             </div>
         </section>
