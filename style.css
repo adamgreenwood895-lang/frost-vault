@@ -1,13 +1,33 @@
 :root {
     --cyan: #00f2ff;
     --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.03);
     --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; height: 100dvh; }
 
-/* VIEW LOGIC */
+body { 
+    background: #000; 
+    color: #fff; 
+    font-family: 'Inter', sans-serif; 
+    overflow: hidden; 
+    height: 100dvh; 
+    width: 100vw;
+}
+
+/* GLOBAL BACKGROUND - Sit behind everything */
+.bg-image {
+    position: fixed;
+    inset: 0;
+    /* Updated to the working filename from your previous prompt */
+    background: url('lv_0_20260430235239.jpg') no-repeat center center;
+    background-size: cover;
+    filter: brightness(0.5);
+    z-index: -1; 
+}
+
+/* VIEW ARCHITECTURE */
 .view {
     position: absolute;
     inset: 0;
@@ -17,45 +37,43 @@ body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #000;
-    overflow: hidden; /* Prevents stray scrollbars */
+    /* Removed background: #000; to prevent black-out */
 }
 
-.bg-image {
-    position: absolute;
-    inset: 0;
-    background: url('assets/iceman_portrait.jpg') no-repeat center center;
-    background-size: cover;
-    filter: brightness(0.6);
-    z-index: 0;
+.view.active { 
+    opacity: 1; 
+    pointer-events: auto; 
 }
 
+/* ORB POSITIONING & CONTENT */
 .orb-hitbox {
     position: absolute;
-    /* This targets the dead center of the energy ball in the palm */
-    top: 65%; 
+    top: 60.5%; /* Locked to palm position */
     left: 50%;
-    transform: translate(-50%, -50%); 
-    
+    transform: translate(-50%, -50%);
     width: 280px;
-    height: 260px;
+    height: 280px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     z-index: 10;
-    /* Remove any default transform from JS scaling here to prevent conflict */
+}
+
+.orb-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 242, 255, 0.3) 0%, transparent 70%);
+    transition: transform 0.3s ease-out;
+    z-index: 1;
 }
 
 .orb-content {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    z-index: 2;
     text-align: center;
     pointer-events: none;
-    z-index: 12;
 }
 
 #voice-label {
@@ -65,73 +83,67 @@ body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow
     letter-spacing: 10px;
     color: var(--cyan);
     text-shadow: 0 0 15px var(--cyan);
-    margin-left: 10px; /* Counteracts the letter-spacing to center text properly */
+    margin-left: 10px; /* Centering fix for letter-spacing */
 }
 
 #cmd-display {
-    margin-top: 5px; /* Keeps command text tight under FROST */
+    margin-top: 8px;
     font-size: 8px;
     letter-spacing: 2px;
-    color: #fff;
     opacity: 0.6;
     text-transform: uppercase;
 }
 
-.orb-glow {
-    position: absolute;
-    inset: 0; /* Ensures glow fills the 260px hitbox */
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0, 242, 255, 0.2) 0%, transparent 70%);
-    transition: transform 0.3s ease-out;
+/* PRODUCT VIEW OVERLAYS */
+#view-products {
+    background: rgba(0,0,0,0.8); /* Dark tint only on product page */
+    backdrop-filter: blur(5px);
 }
 
-.listening .orb-glow { animation: pulse 1s infinite; background: radial-gradient(circle, rgba(0, 242, 255, 0.3) 0%, transparent 70%); }
-@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+.mist-overlay {
+    position: absolute;
+    inset: 0;
+    background: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
+    opacity: 0.1;
+    pointer-events: none;
+    animation: mistShift 30s linear infinite;
+}
 
-#voice-label { font-family: 'Syncopate'; font-size: 11px; letter-spacing: 10px; color: var(--cyan); text-shadow: 0 0 10px var(--cyan); }
-#cmd-display { margin-top: 10px; font-size: 8px; letter-spacing: 2px; opacity: 0.5; text-transform: uppercase; }
+@keyframes mistShift { from { background-position: 0 0; } to { background-position: 1000px 500px; } }
 
-/* PRODUCTS VIEW */
-.product-header { padding: 40px 0 20px; text-align: center; width: 100%; flex-shrink: 0; }
-.header-line { width: 30px; height: 2px; background: var(--cyan); margin: 0 auto 10px; }
+/* GRID & CARDS */
+.product-header { padding: 40px 0 20px; text-align: center; width: 100%; }
 .glitch-text { font-family: 'Syncopate'; letter-spacing: 8px; font-size: 16px; }
-.system-status { font-size: 8px; opacity: 0.6; letter-spacing: 2px; margin-top: 5px; }
 
 .grid {
     flex-grow: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
-    padding: 0 15px 100px; /* Space for fixed footer */
+    padding: 0 15px 120px;
     width: 100%;
     max-width: 500px;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
 }
 
 .product-card {
     background: rgba(255,255,255,0.03);
-    backdrop-filter: blur(10px);
     border: 1px solid rgba(0,242,255,0.1);
     border-top: 2px solid var(--cyan);
     padding: 10px;
     text-align: center;
-    border-radius: 2px;
 }
 
-.product-card img { width: 100%; border-radius: 2px; aspect-ratio: 1/1; object-fit: cover; }
-
-.price-tag { font-family: 'Syncopate'; font-size: 10px; color: var(--cyan); margin: 8px 0; }
+.product-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
 
 .cmd-bar {
     position: fixed;
     bottom: 0;
     width: 100%;
-    padding: 20px;
-    background: linear-gradient(to top, #000 70%, transparent);
+    padding: 30px;
+    background: linear-gradient(to top, #000, transparent);
     display: flex;
     justify-content: center;
-    z-index: 100;
 }
 
 .back-btn {
@@ -141,17 +153,10 @@ body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow
     padding: 12px 30px;
     font-size: 10px;
     letter-spacing: 4px;
-    border-radius: 4px;
     cursor: pointer;
 }
 
 .select-btn {
     width: 100%; background: var(--cyan); border: none; color: #000;
-    padding: 10px; font-size: 9px; font-weight: 900; letter-spacing: 1px;
+    padding: 10px; font-size: 9px; font-weight: 900; cursor: pointer;
 }
-
-/* CHECKOUT */
-.checkout-container { padding: 40px 20px; width: 100%; max-width: 400px; text-align: center; }
-.checkout-card-dynamic { margin: 20px 0; }
-.track-line { width: 100%; height: 2px; background: rgba(255,255,255,0.1); margin: 15px 0; position: relative; }
-.track-fill { position: absolute; height: 100%; width: 0%; background: var(--cyan); transition: 1s; }
