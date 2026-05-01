@@ -1,1 +1,133 @@
+:root {
+    --cyan: #00f2ff;
+    --white: #ffffff;
+    --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body { 
+    background: #000; 
+    color: var(--white); 
+    font-family: 'Inter', sans-serif; 
+    overflow: hidden; 
+    height: 100dvh;
+}
+
+/* VIEW MANAGEMENT */
+.view {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.view.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* LANDING & ORB */
+.bg-image {
+    position: absolute;
+    inset: 0;
+    background: url('assets/iceman_portrait.jpg') no-repeat center center;
+    background-size: cover;
+    filter: brightness(0.7);
+    transition: var(--transition);
+}
+
+.view.active .bg-image { transform: scale(1.05); }
+
+.orb-hitbox {
+    position: absolute;
+    top: 60.5%; /* Precision alignment for your image */
+    width: 220px;
+    height: 220px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.orb-glow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 242, 255, 0.2) 0%, transparent 70%);
+    transition: var(--transition);
+}
+
+/* The pulse animation when listening */
+.listening .orb-glow {
+    animation: orbPulse 1.5s infinite;
+    background: radial-gradient(circle, rgba(0, 242, 255, 0.4) 0%, transparent 70%);
+}
+
+@keyframes orbPulse {
+    0% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.4); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 0.5; }
+}
+
+#voice-label {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 12px;
+    letter-spacing: 8px;
+    color: var(--cyan);
+    text-shadow: 0 0 15px var(--cyan);
+}
+
+#cmd-display {
+    position: absolute;
+    bottom: -40px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.6;
+    white-space: nowrap;
+}
+
+/* PRODUCT GRID */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    transform: translateY(50px);
+    transition: var(--transition);
+}
+
+.view.active .grid { transform: translateY(0); }
+
+.product-card {
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 15px;
+    text-align: center;
+}
+
+.product-card img { width: 100%; border-radius: 12px; filter: grayscale(0.5); transition: 0.5s; }
+.product-card:hover img { filter: grayscale(0); transform: scale(1.02); }
+
+.back-btn {
+    background: transparent;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    padding: 8px 20px;
+    font-size: 10px;
+    border-radius: 20px;
+    margin-top: 20px;
+    cursor: pointer;
+  }
