@@ -89,7 +89,7 @@ body {
 
 #cmd-display {
     position: absolute;
-    bottom: -40px;
+    bottom: -20px;
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 2px;
