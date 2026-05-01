@@ -29,6 +29,7 @@ const orb = document.getElementById('orb-trigger');
 const cmdDisplay = document.getElementById('cmd-display');
 const voiceLabel = document.getElementById('voice-label');
 
+// --- VOICE ENGINE ---
 const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = Speech ? new Speech() : null;
 
@@ -40,23 +41,44 @@ if (recognition) {
 
     recognition.onresult = (e) => {
         const transcript = e.results[0][0].transcript.toLowerCase();
-        cmdDisplay.innerText = transcript;
-        if (e.results[0].isFinal) processCommand(transcript);
+        const orbGlow = document.querySelector('.orb-glow');
+        
+        cmdDisplay.innerText = transcript.toUpperCase();
+
+        // Scale ONLY the glow layer to keep text centered
+        const scale = 1 + (transcript.length * 0.015);
+        if (orbGlow) orbGlow.style.transform = `scale(${Math.min(scale, 1.4)})`;
+
+        if (e.results[0].isFinal) {
+            processCommand(transcript);
+        }
     };
 
     recognition.onend = () => {
+        const orbGlow = document.querySelector('.orb-glow');
         orb.classList.remove('listening');
+        if (orbGlow) orbGlow.style.transform = `scale(1)`;
         if (voiceLabel.innerText === "LISTENING") voiceLabel.innerText = "FROST";
     };
 
     orb.onclick = () => recognition.start();
 }
 
+// --- NAVIGATION & VIEW LOGIC ---
+function changeView(viewId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const target = document.getElementById(`view-${viewId}`);
+    if (target) {
+        target.classList.add('active');
+        if(viewId === 'products') document.getElementById('product-grid').scrollTop = 0;
+    }
+}
+
 function processCommand(cmd) {
     let cat = "";
     if (cmd.includes("hoodie")) cat = "hoodies";
     if (cmd.includes("shirt") || cmd.includes("tee")) cat = "tshirts";
-    if (cmd.includes("tracksuit")) cat = "tracksuits";
+    if (cmd.includes("tracksuit") || cmd.includes("track")) cat = "tracksuits";
     if (cmd.includes("bag")) cat = "bags";
 
     if (cat) {
@@ -69,16 +91,10 @@ function processCommand(cmd) {
     }
 }
 
-function changeView(viewId) {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.getElementById(`view-${viewId}`).classList.add('active');
-    // Scroll to top of grid when changing views
-    if(viewId === 'products') document.getElementById('product-grid').scrollTop = 0;
-}
-
 function renderProducts(cat) {
     const grid = document.getElementById('product-grid');
-    document.getElementById('cat-title').innerText = cat.toUpperCase();
+    const title = document.getElementById('cat-title');
+    if (title) title.innerText = cat.toUpperCase();
     grid.innerHTML = "";
     
     DB[cat].forEach((item, index) => {
@@ -109,16 +125,20 @@ function initCheckout(item) {
 }
 
 function startTracking() {
-    document.getElementById('auth-btn').style.display = 'none';
-    document.getElementById('tracking-ui').style.display = 'block';
+    const authBtn = document.getElementById('auth-btn');
+    const trackUi = document.getElementById('tracking-ui');
     const fill = document.getElementById("trackFill");
     const status = document.getElementById("trackStatus");
+
+    if (authBtn) authBtn.style.display = 'none';
+    if (trackUi) trackUi.style.display = 'block';
+
     const stages = ["VALIDATING", "ENCRYPTING", "DISPATCHED", "DELIVERED"];
 
     stages.forEach((txt, i) => {
         setTimeout(() => {
-            fill.style.width = ((i + 1) * 25) + "%";
-            status.innerText = txt + "...";
+            if (fill) fill.style.width = ((i + 1) * 25) + "%";
+            if (status) status.innerText = txt + "...";
             if(i === 3) {
                 setTimeout(() => {
                     alert("PROTOCOL COMPLETE. PRODUCT DELIVERED.");
