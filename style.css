@@ -1,7 +1,6 @@
 :root {
     --cyan: #00f2ff;
     --white: #ffffff;
-    --glass: rgba(255, 255, 255, 0.03);
     --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -12,22 +11,21 @@ body {
     color: #fff; 
     font-family: 'Inter', sans-serif; 
     overflow: hidden; 
-    height: 100dvh; 
+    height: 100vh; 
     width: 100vw;
 }
 
-/* GLOBAL BACKGROUND - Sit behind everything */
+/* GLOBAL BACKGROUND */
 .bg-image {
     position: fixed;
     inset: 0;
-    /* Updated to the working filename from your previous prompt */
     background: url('assets/iceman_portrait.jpg') no-repeat center center;
     background-size: cover;
     filter: brightness(0.5);
-    z-index: -1; 
+    z-index: 1; /* Sits at the bottom */
 }
 
-/* VIEW ARCHITECTURE */
+/* VIEW SYSTEM */
 .view {
     position: absolute;
     inset: 0;
@@ -37,7 +35,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Removed background: #000; to prevent black-out */
+    z-index: 5; /* Sits above BG */
 }
 
 .view.active { 
@@ -45,118 +43,103 @@ body {
     pointer-events: auto; 
 }
 
-/* ORB POSITIONING & CONTENT */
+/* THE ORB ANCHOR - This is what locks it to the hand */
 .orb-hitbox {
     position: absolute;
-    top: 60.5%; /* Locked to palm position */
+    top: 60.5%; /* Adjust this % if the hand moves on different devices */
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 280px;
-    height: 280px;
+    width: 300px;
+    height: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    z-index: 10;
 }
 
 .orb-glow {
     position: absolute;
-    inset: 0;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(0, 242, 255, 0.3) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(0, 242, 255, 0.35) 0%, transparent 70%);
     transition: transform 0.3s ease-out;
-    z-index: 1;
+    z-index: 6;
 }
 
 .orb-content {
     position: relative;
-    z-index: 2;
+    z-index: 7; /* Highest layer for text clarity */
     text-align: center;
     pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #voice-label {
     font-family: 'Syncopate';
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 10px;
+    letter-spacing: 12px;
     color: var(--cyan);
-    text-shadow: 0 0 15px var(--cyan);
-    margin-left: 10px; /* Centering fix for letter-spacing */
+    text-shadow: 0 0 20px var(--cyan);
+    margin-left: 12px; /* Offsets letter-spacing to ensure true center */
 }
 
 #cmd-display {
-    margin-top: 8px;
+    margin-top: 10px;
     font-size: 8px;
-    letter-spacing: 2px;
-    opacity: 0.6;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
 }
 
-/* PRODUCT VIEW OVERLAYS */
+/* PRODUCT VIEW TINT */
 #view-products {
-    background: rgba(0,0,0,0.8); /* Dark tint only on product page */
-    backdrop-filter: blur(5px);
+    background: rgba(0,0,0,0.85); /* Dims the BG image when viewing products */
+    backdrop-filter: blur(8px);
 }
-
-.mist-overlay {
-    position: absolute;
-    inset: 0;
-    background: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
-    opacity: 0.1;
-    pointer-events: none;
-    animation: mistShift 30s linear infinite;
-}
-
-@keyframes mistShift { from { background-position: 0 0; } to { background-position: 1000px 500px; } }
-
-/* GRID & CARDS */
-.product-header { padding: 40px 0 20px; text-align: center; width: 100%; }
-.glitch-text { font-family: 'Syncopate'; letter-spacing: 8px; font-size: 16px; }
 
 .grid {
     flex-grow: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    padding: 0 15px 120px;
+    gap: 15px;
+    padding: 100px 20px; /* Space for header and footer */
     width: 100%;
     max-width: 500px;
     overflow-y: auto;
 }
 
 .product-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(0,242,255,0.1);
-    border-top: 2px solid var(--cyan);
-    padding: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(0,242,255,0.2);
+    padding: 15px;
     text-align: center;
+    border-radius: 4px;
 }
 
-.product-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+.product-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 2px; }
 
 .cmd-bar {
     position: fixed;
     bottom: 0;
     width: 100%;
     padding: 30px;
-    background: linear-gradient(to top, #000, transparent);
+    background: linear-gradient(to top, #000 80%, transparent);
     display: flex;
     justify-content: center;
+    z-index: 100;
 }
 
 .back-btn {
     background: transparent;
     border: 1px solid var(--cyan);
     color: var(--cyan);
-    padding: 12px 30px;
+    padding: 15px 40px;
     font-size: 10px;
-    letter-spacing: 4px;
+    letter-spacing: 5px;
     cursor: pointer;
-}
-
-.select-btn {
-    width: 100%; background: var(--cyan); border: none; color: #000;
-    padding: 10px; font-size: 9px; font-weight: 900; cursor: pointer;
+    border-radius: 50px;
 }
