@@ -34,22 +34,56 @@ body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow
 
 .orb-hitbox {
     position: absolute;
-    top: 60.5%;
+    /* This targets the dead center of the energy ball in the palm */
+    top: 60.5%; 
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    
     width: 260px;
     height: 260px;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     z-index: 10;
+    /* Remove any default transform from JS scaling here to prevent conflict */
+}
+
+.orb-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    pointer-events: none;
+    z-index: 11;
+}
+
+#voice-label {
+    font-family: 'Syncopate';
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 10px;
+    color: var(--cyan);
+    text-shadow: 0 0 15px var(--cyan);
+    margin-left: 10px; /* Counteracts the letter-spacing to center text properly */
+}
+
+#cmd-display {
+    margin-top: 5px; /* Keeps command text tight under FROST */
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: #fff;
+    opacity: 0.6;
+    text-transform: uppercase;
 }
 
 .orb-glow {
     position: absolute;
-    width: 100%; height: 100%;
+    inset: 0; /* Ensures glow fills the 260px hitbox */
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(0, 242, 255, 0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(0, 242, 255, 0.2) 0%, transparent 70%);
+    transition: transform 0.3s ease-out;
 }
 
 .listening .orb-glow { animation: pulse 1s infinite; background: radial-gradient(circle, rgba(0, 242, 255, 0.3) 0%, transparent 70%); }
