@@ -29,7 +29,6 @@ const orb = document.getElementById('orb-trigger');
 const cmdDisplay = document.getElementById('cmd-display');
 const voiceLabel = document.getElementById('voice-label');
 
-// --- VOICE ENGINE ---
 const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = Speech ? new Speech() : null;
 
@@ -41,20 +40,13 @@ if (recognition) {
 
     recognition.onresult = (e) => {
         const transcript = e.results[0][0].transcript.toLowerCase();
-        cmdDisplay.innerText = transcript.toUpperCase();
-        
-        // Expansion effect
-        const scale = 1 + (transcript.length * 0.01);
-        orb.style.transform = `scale(${Math.min(scale, 1.2)})`;
-
-        if (e.results[0].isFinal) {
-            processCommand(transcript);
-        }
+        cmdDisplay.innerText = transcript;
+        if (e.results[0].isFinal) processCommand(transcript);
     };
 
     recognition.onend = () => {
         orb.classList.remove('listening');
-        orb.style.transform = `scale(1)`;
+        if (voiceLabel.innerText === "LISTENING") voiceLabel.innerText = "FROST";
     };
 
     orb.onclick = () => recognition.start();
@@ -68,19 +60,20 @@ function processCommand(cmd) {
     if (cmd.includes("bag")) cat = "bags";
 
     if (cat) {
-        voiceLabel.innerText = "ACCESSING";
+        voiceLabel.innerText = "MATCHED";
         renderProducts(cat);
-        setTimeout(() => changeView('products'), 800);
+        setTimeout(() => changeView('products'), 600);
     } else {
         voiceLabel.innerText = "RETRY";
         setTimeout(() => voiceLabel.innerText = "FROST", 1200);
     }
 }
 
-// --- APP CONTROLLER ---
 function changeView(viewId) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById(`view-${viewId}`).classList.add('active');
+    // Scroll to top of grid when changing views
+    if(viewId === 'products') document.getElementById('product-grid').scrollTop = 0;
 }
 
 function renderProducts(cat) {
@@ -91,43 +84,47 @@ function renderProducts(cat) {
     DB[cat].forEach((item, index) => {
         const card = document.createElement('div');
         card.className = "product-card";
-        card.style.opacity = "0";
-        card.style.transform = "translateY(20px)";
         card.innerHTML = `
             <img src="${item.image}">
-            <p style="font-family:'Syncopate'; font-size:9px;">${item.name}</p>
-            <p style="color:var(--cyan); font-size:12px; margin: 10px 0;">${item.price}</p>
-            <button class="select-btn" onclick='initCheckout(${JSON.stringify(item)})'>SELECT_ID</button>
+            <p style="font-family:'Syncopate'; font-size:8px; margin-top:10px;">${item.name}</p>
+            <p class="price-tag">${item.price}</p>
+            <button class="select-btn" onclick='initCheckout(${JSON.stringify(item)})'>SELECT</button>
         `;
         grid.appendChild(card);
-        setTimeout(() => {
-            card.style.transition = "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)";
-            card.style.opacity = "1";
-            card.style.transform = "translateY(0)";
-        }, index * 100);
     });
 }
 
 function initCheckout(item) {
-    const container = document.getElementById('checkout-card');
-    container.innerHTML = `
-        <img src="${item.image}">
-        <p style="font-family:'Syncopate'; font-size:10px;">${item.name}</p>
-        <p style="color:var(--cyan); font-size:14px; margin: 10px 0;">${item.price}</p>
+    const card = document.getElementById('checkout-card');
+    card.innerHTML = `
+        <div class="product-card">
+            <img src="${item.image}">
+            <p style="font-family:'Syncopate'; font-size:10px; margin-top:10px;">${item.name}</p>
+            <p class="price-tag" style="font-size:14px;">${item.price}</p>
+        </div>
     `;
+    document.getElementById('tracking-ui').style.display = 'none';
+    document.getElementById('auth-btn').style.display = 'block';
     changeView('checkout');
 }
 
 function startTracking() {
+    document.getElementById('auth-btn').style.display = 'none';
     document.getElementById('tracking-ui').style.display = 'block';
     const fill = document.getElementById("trackFill");
     const status = document.getElementById("trackStatus");
-    const stages = ["ENCRYPTING", "MANIFESTING", "DISPATCHED", "DELIVERED"];
+    const stages = ["VALIDATING", "ENCRYPTING", "DISPATCHED", "DELIVERED"];
 
     stages.forEach((txt, i) => {
         setTimeout(() => {
             fill.style.width = ((i + 1) * 25) + "%";
             status.innerText = txt + "...";
-        }, (i + 1) * 2000);
+            if(i === 3) {
+                setTimeout(() => {
+                    alert("PROTOCOL COMPLETE. PRODUCT DELIVERED.");
+                    changeView('landing');
+                }, 1000);
+            }
+        }, (i + 1) * 1500);
     });
 }
